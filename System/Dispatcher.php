@@ -16,19 +16,9 @@ class Dispatcher
     public function dispatch()
     {
         $url = trim($_SERVER['REQUEST_URI'], '/');
-        $urlParts = explode('/', $url);
-
-        $controller = 'MVC\Controller\\' . ucfirst($urlParts[0]);
-        $action = $urlParts[1];
-
-        foreach (Config::get('router', 'urls') as $currentUrl => $rule) {
-            if ($url === $currentUrl) {
-                $controller = $rule['controller'];
-                $action = $rule['action'];
-            }
-        }
-
-        $action = $action . 'Action';
+        $rule = Config::get($url);
+        $controller = $rule['controller'];
+        $action = $rule['action'];
 
         if (class_exists($controller) && method_exists($controller, $action)) {
             $controller = new $controller();
@@ -40,5 +30,4 @@ class Dispatcher
             include APP_ROOT . 'MVC/Layout/main.phtml';
         }
     }
-
 }
