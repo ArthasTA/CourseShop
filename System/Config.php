@@ -10,29 +10,31 @@ class Config
 {
 
     /**
-     * @var array
-     */
-    private static $cache = [];
-
-    /**
      * @param null $default
      * @return array|null
      */
     public static function get($url,$default = null)
     {
         $urlParts = explode('/', $url);
-        $rules = array();
-        $name = 'router';
-        $key = 'urls';
+        $values = include_once APP_ROOT . 'config/router.php';
 
-        if (isset(self::$cache[$name]) === false) {
-            static::$cache = include_once APP_ROOT . 'config/' . $name . '.php';
+        $subject = $urlParts[0];
+        $pattern = '/^api/';
+        preg_match($pattern, $subject, $matches, PREG_OFFSET_CAPTURE);
+
+        if ($matches == true){
+            $key = 'patterns';
+            echo 'patterns';
+        } else {
+            $key = 'urls';
+            echo 'urls';
         }
 
-        $values = static::$cache;
+        $rules = array();
         $key = (array)$key;
 
         foreach ($key as $item) {
+
             if (isset($values[$item])) {
                 $values = $values[$item];
                 foreach ($values as $currentUrl => $rule) {
