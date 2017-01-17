@@ -24,10 +24,8 @@ class Config
 
         if ($matches == true){
             $key = 'patterns';
-            echo 'patterns';
         } else {
             $key = 'urls';
-            echo 'urls';
         }
 
         $rules = array();
